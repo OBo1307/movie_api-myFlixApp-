@@ -28,6 +28,7 @@
 				<li>Allow existing users to deregister.</li>
 			</ul>
 		</div>
+		<hr>
 
 		<h2>Endpoint Documentation</h2>
 		<table>
@@ -54,27 +55,27 @@
 
 				<tr>
 					<td>Return data about a single movie by title</td>
-					<td>/movies/:title</td>
+					<td>/movies/:Title</td>
 					<td>GET</td>
-					<td>:title</td>
+					<td>:Title</td>
 					<td>None</td>
 					<td>A JSON object containing data about a single movie.</td>
 				</tr>
 
 				<tr>
 					<td>Return data about a genre (description)</td>
-					<td>/movies/genre/:genreName</td>
+					<td>/movies/genre/:GenreName</td>
 					<td>GET</td>
-					<td>:genreName</td>
+					<td>:GenreName</td>
 					<td>None</td>
 					<td>A JSON object containing data about a genre.</td>
 				</tr>
 
 				<tr>
 					<td>Returns data about a director by name</td>
-					<td>/movies/directors/:directorName</td>
+					<td>/movies/directors/:DirectorName</td>
 					<td>GET</td>
-					<td>:directorName</td>
+					<td>:DirectorName</td>
 					<td>None</td>
 					<td>A JSON object containing data about a director.</td>
 				</tr>
@@ -86,8 +87,10 @@
 					<td>None</td>
 					<td>JSON object structure: <br />
                         { <br />
-						"Name": "Jack", <br />
-						"favoriteMovies":[] <br />
+							Username: {type: String, required: true}, <br />
+							Password: {type: String, required: true}, <br />
+							Email: {type: String, required: true}, <br />
+							Birthday: Date <br />
 						}
 					</td>
 					<td>A JSON object containing data about the new user.</td>
@@ -95,13 +98,15 @@
 
 				<tr>
 					<td>Allows users to update their user info (username)</td>
-					<td>/users/:Id</td>
+					<td>/users/:Username</td>
 					<td>PUT</td>
-					<td>:Id</td>
+					<td>:Username</td>
 					<td>JSON object structure: <br />
                         { <br />
-						"Name": "Jack updated Name", <br />
-						"favoriteMovies":[] <br />
+							Username: {type: String, required: true}, <br />
+							Password: {type: String, required: true}, <br />
+							Email: {type: String, required: true}, <br />
+							Birthday: Date <br />
 						}
                     </td>
 					<td>A JSON object containing the updated username.</td>
@@ -109,9 +114,9 @@
 
 				<tr>
 					<td>Allow users to add a movie to their list of favorites</td>
-					<td>/users/:Id/:movieTitle</td>
+					<td>/users/:Username/movies/:MovieId</td>
 					<td>POST</td>
-					<td>:Id/:movieTitle</td>
+					<td>:Username/movies/:MovieId</td>
 					<td>None</td>
 					<td>
 						A text message indicating that the movie has successfully been added
@@ -121,9 +126,9 @@
 
 				<tr>
 					<td>Allow users to remove a movie from their list of favorites</td>
-					<td>/users/:Id/:movieTitle</td>
+					<td>/users/:Username/movies/:MovieId</td>
 					<td>DELETE</td>
-					<td>:Id/:movieTitle</td>
+					<td>:Username/movies/:MovieId</td>
 					<td>None</td>
 					<td>
 						A text message indicating that the movie has successfully been
@@ -133,9 +138,9 @@
 
 				<tr>
 					<td>Allows existing users to deregister</td>
-					<td>/users/:Id</td>
+					<td>/users/:Username</td>
 					<td>DELETE</td>
-					<td>:Id</td>
+					<td>:Username</td>
 					<td>None</td>
 					<td>
 						A text message indicating that the user has successfully been
