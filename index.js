@@ -21,16 +21,24 @@ mongoose.connect('mongodb://127.0.0.1:27017/mfDB', {
     useUnifiedTopology: true 
 });
 
+// bodyParser middleware functions
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+// Import 'auth.js' file
+let auth = require('./auth.js')(app);
+
+// Import Passport module and 'passport.js' file
+const passport = require('passport');
+require('./passport.js')
 
 // GET(READ) requests
 app.get('/', (req, res) => {
     res.send('Welcome to myFlix!');
 });
 
-// GET in Mongoose. all the movies
-app.get('/movies', (req, res) => {
+// GET with Mongoose and JWT authentication. Data about all the movies
+app.get('/movies', passport.authenticate('jwt', { session: false }), (req, res) => {
     Movies.find()
         .then((movies) => {
             res.status(200).json(movies);
@@ -41,8 +49,33 @@ app.get('/movies', (req, res) => {
         });
 });
 
-// GET in Mongoose. movies by Title
-app.get('/movies/:Title', (req, res) => {
+// Temporary POST(Create) a new movie
+app.post('/movies', (req, res) => {
+    Movies.findOne({ Title: req.body.Title })
+        .then((movie) => {
+            if (movie) {
+                return res.status(400).send(req.body.Title + 'already exists');
+            } else {
+                Movies.create({
+                    Title: req.body.Title,
+                    Genre: req.body.Genre,
+                    Director: req.body.Director,
+                })
+                .then((movie) => {res.status(201).json(movie)})
+                .catch((error) => {
+                    console.error(error);
+                    res.status(500).send('Error: ' + error);
+                })
+            }
+        })
+        .catch((error) => {
+            console.error(error);
+            res.status(500).send('Error: ' + error);
+        });
+});
+
+// GET with Mongoose and JWT authentication. movies by Title
+app.get('/movies/:Title', passport.authenticate('jwt', { session: false }), (req, res) => {
     Movies.findOne({ Title: req.params.Title })
         .then((movie) => {
             res.json(movie);
@@ -53,8 +86,8 @@ app.get('/movies/:Title', (req, res) => {
         });
 });
 
-// GET in Mangoose. data about a genre
-app.get('/movies/genre/:GenreName', (req, res) => {
+// GET with Mongoose and JWT authentication. data about a genre
+app.get('/movies/genre/:GenreName', passport.authenticate('jwt', { session: false }), (req, res) => {
     Movies.findOne({ 'Genre.Name': req.params.GenreName })
         .then((movie) => {
             res.json(movie.Genre);
@@ -65,8 +98,8 @@ app.get('/movies/genre/:GenreName', (req, res) => {
         });
 });
 
-// GET in Mongoose. data about a director
-app.get('/movies/directors/:DirectorName', (req, res) => {
+// GET with Mongoose and JWT authentication. data about a director
+app.get('/movies/directors/:DirectorName', passport.authenticate('jwt', { session: false }), (req, res) => {
     Movies.findOne({ 'Director.Name': req.params.DirectorName })
         .then((movie) => {
             res.json(movie.Director);
@@ -77,8 +110,8 @@ app.get('/movies/directors/:DirectorName', (req, res) => {
         });
 });
 
-// GET in Mongoose. all the users
-app.get('/users', (req, res) => {
+// GET with Mongoose and JWT authentication. all the users
+app.get('/users', passport.authenticate('jwt', { session: false }), (req, res) => {
     Users.find()
         .then(function (users) {
             res.status(201).json(users);
@@ -115,8 +148,8 @@ app.post('/users', (req, res) => {
         });
 });
 
-// PUT(UPDATE) in Mongoose. Allow users to update their user info (username)
-app.put('/users/:Username', (req, res) => {
+// PUT(UPDATE) with Mongoose and JWT authentication. Allow users to update their user info (username)
+app.put('/users/:Username', passport.authenticate('jwt', { session: false }), (req, res) => {
     Users.findOneAndUpdate(
         { Username: req.params.Username }, 
         { $set: {
@@ -137,8 +170,8 @@ app.put('/users/:Username', (req, res) => {
     });
 });
 
-// POST(CREATE) in Mongoose. Allow users to add a movie to their list of favorites
-app.post('/users/:Username/movies/:MovieID', (req, res) => {
+// POST(CREATE) with Mongoose and JWT authentication. Allow users to add a movie to their list of favorites
+app.post('/users/:Username/movies/:MovieID', passport.authenticate('jwt', { session: false }), (req, res) => {
     Users.findOneAndUpdate(
         { Username: req.body.Username }, 
         { $push: { FavoriteMovies: req.params.MovieID },
@@ -154,8 +187,8 @@ app.post('/users/:Username/movies/:MovieID', (req, res) => {
     });
 });
 
-// DELETE in Mongoose. Allow users to remove a movie from their list of favorites
-app.delete('/users/:Username/movies/:MovieID', (req, res) => {
+// DELETE with Mongoose and JWT authentication. Allow users to remove a movie from their list of favorites
+app.delete('/users/:Username/movies/:MovieID', passport.authenticate('jwt', { session: false }), (req, res) => {
     Users.findOneAndUpdate({ Username: req.body.Username }, 
         { $pull: { FavoriteMovies: req.params.MovieID }
     },
@@ -170,8 +203,8 @@ app.delete('/users/:Username/movies/:MovieID', (req, res) => {
     });
 });
 
-// DELETE in Mongoose. Allow existing users to deregister
-app.delete('/users/:Username', (req, res) => {
+// DELETE with Mongoose and JWT authentication. Allow existing users to deregister
+app.delete('/users/:Username', passport.authenticate('jwt', { session: false }), (req, res) => {
     Users.findOneAndRemove({ UserName: req.params.Username })
         .then((user) => {
             if (!user) {
