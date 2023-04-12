@@ -17,7 +17,14 @@ const Models = require('./models.js');
 const Movies = Models.Movie;
 const Users = Models.User;
 
-mongoose.connect('mongodb://127.0.0.1:27017/mfDB', {
+//allows Mongoose to connect to MongoDB database local
+/* mongoose.connect('mongodb://127.0.0.1:27017/mfDB', {
+    useNewUrlParser: true, 
+    useUnifiedTopology: true 
+}); */
+
+//allows Mongoose to connect to database via MongoDB Atlas
+mongoose.connect( process.env.CONNECTION_URI, {
     useNewUrlParser: true, 
     useUnifiedTopology: true 
 });
