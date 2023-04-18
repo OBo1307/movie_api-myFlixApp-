@@ -70,17 +70,16 @@ app.get('/', (req, res) => {
 });
 
 // GET with Mongoose and JWT authentication. Data about all the movies
-app.get('/movies'), (req, res) => {
-		Movies.find()
-			.then((movies) => {
-				res.status(200).json(movies);
-			})
-			.catch((err) => {
-				console.error(err);
-				res.status(500).send('Error: ' + err);
-			});
-	}
-);
+app.get('/movies', (req, res) => {
+	Movies.find()
+		.then((movies) => {
+			res.status(200).json(movies);
+		})
+		.catch((err) => {
+			console.error(err);
+			res.status(500).send('Error: ' + err);
+		});
+});
 
 // GET with Mongoose and JWT authentication. movies by Title
 app.get(
