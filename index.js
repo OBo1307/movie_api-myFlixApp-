@@ -70,10 +70,7 @@ app.get('/', (req, res) => {
 });
 
 // GET with Mongoose and JWT authentication. Data about all the movies
-app.get(
-	'/movies',
-	passport.authenticate('jwt', { session: false }),
-	(req, res) => {
+app.get('/movies'), (req, res) => {
 		Movies.find()
 			.then((movies) => {
 				res.status(200).json(movies);
