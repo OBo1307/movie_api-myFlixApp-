@@ -34,6 +34,7 @@ const cors = require('cors');
 let allowedOrigins = [
 	'http://localhost:8080',
 	'https://boflixapp.herokuapp.com',
+	'https://boflixapplication.netlify.app',
 	'http://localhost:1234',
 ];
 
