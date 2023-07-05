@@ -36,6 +36,7 @@ let allowedOrigins = [
 	'https://boflixapp.herokuapp.com',
 	'https://boflixapplication.netlify.app',
 	'http://localhost:1234',
+	'http://localhost:4200',
 ];
 
 app.use(
