@@ -37,6 +37,7 @@ let allowedOrigins = [
 	'https://boflixapplication.netlify.app',
 	'http://localhost:1234',
 	'http://localhost:4200',
+	'https://bomyflix-angular.netlify.app/'
 ];
 
 app.use(
