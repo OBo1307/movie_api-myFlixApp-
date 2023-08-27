@@ -37,6 +37,7 @@ let allowedOrigins = [
 	'https://boflixapplication.netlify.app',
 	'https://obo1307.github.io/myFlix-Angular-client-main/welcome',
 	'https://obo1307.github.io/myFlix-Angular-client-main',
+	'https://obo1307.github.io',
 	'http://localhost:1234',
 	'http://localhost:4200',
 ];
